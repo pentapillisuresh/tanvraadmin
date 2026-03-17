@@ -351,16 +351,16 @@ const Jobs = () => {
 
   return (
     <Layout>
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Jobs Management</h1>
-        <div className="flex space-x-3">
+        <div className="flex space-x-3 w-full sm:w-auto">
           <button
             onClick={refreshData}
-            className="flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+            className="flex items-center justify-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex-1 sm:flex-none"
             title="Refresh data"
           >
             <FiRefreshCw className="mr-2" />
-            Refresh
+            <span className="sm:inline">Refresh</span>
           </button>
           <button
             onClick={() => {
@@ -370,10 +370,10 @@ const Jobs = () => {
               }
               setShowModal(true);
             }}
-            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex-1 sm:flex-none"
           >
             <FiPlus className="mr-2" />
-            Post New Job
+            <span className="sm:inline">Post New Job</span>
           </button>
         </div>
       </div>
@@ -549,155 +549,157 @@ const Jobs = () => {
         )}
       </div>
 
-      {/* Jobs Table */}
+      {/* Jobs Table - with horizontal scroll */}
       <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sr. No.</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Job ID</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Job Title</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {loading ? (
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
               <tr>
-                <td colSpan="9" className="text-center py-8">
-                  <div className="flex justify-center items-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                    <span className="ml-2 text-gray-600">Loading jobs...</span>
-                  </div>
-                </td>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Sr. No.</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Job ID</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Job Title</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Company</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Category</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Location</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Type</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Actions</th>
               </tr>
-            ) : jobs.length === 0 ? (
-              <tr>
-                <td colSpan="9" className="text-center py-8">
-                  <p className="text-gray-500 mb-2">No jobs found</p>
-                  <button
-                    onClick={() => setShowModal(true)}
-                    className="text-blue-600 hover:text-blue-800 font-medium"
-                  >
-                    Post your first job
-                  </button>
-                </td>
-              </tr>
-            ) : (
-              jobs.map((job, index) => (
-                <tr key={job._id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-4 py-4 text-sm text-gray-500">
-                    {(index + 1).toString().padStart(2, '0')}
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono bg-gray-100 px-2 py-1 rounded">
-                        {job._id.slice(-8).toUpperCase()}
-                      </span>
-                      <button
-                        onClick={() => copyJobLink(job._id)}
-                        className={`p-1.5 rounded transition-colors ${
-                          copiedId === job._id
-                            ? 'bg-green-100 text-green-600'
-                            : 'bg-gray-100 text-gray-600 hover:bg-blue-100 hover:text-blue-600'
-                        }`}
-                        title="Copy job link"
-                      >
-                        {copiedId === job._id ? <FiCopy className="w-3.5 h-3.5" /> : <FiCopy className="w-3.5 h-3.5" />}
-                      </button>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <button
-                      onClick={() => handleViewDetails(job)}
-                      className="text-blue-600 hover:text-blue-800 font-medium text-left flex items-center gap-1"
-                    >
-                      {job.title}
-                      <FiEye className="ml-1 text-gray-400" size={14} />
-                    </button>
-                  </td>
-                  <td className="px-6 py-4 text-gray-600">{job.companyName}</td>
-                  <td className="px-6 py-4">
-                    <button
-                      onClick={() => handleCategoryClick(job.category?._id)}
-                      className={`px-2 py-1 rounded-md text-sm transition-colors ${
-                        job.category?.name === 'Others'
-                          ? 'bg-purple-100 text-purple-800 hover:bg-purple-200'
-                          : 'bg-blue-100 text-blue-800 hover:bg-blue-200'
-                      }`}
-                    >
-                      {job.category?.name === 'Others' ? (
-                        <>
-                          {job.category.name}
-                          {job.customCategory && (
-                            <span className="ml-1 text-xs font-normal">
-                              ({job.customCategory})
-                            </span>
-                          )}
-                        </>
-                      ) : (
-                        job.category?.name
-                      )}
-                    </button>
-                  </td>
-                  <td className="px-6 py-4 text-gray-600">{job.location}</td>
-                  <td className="px-6 py-4">
-                    <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded-md text-xs">
-                      {job.employmentType || 'Full Time'}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span
-                      className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                        job.status === 'active'
-                          ? 'bg-green-100 text-green-800'
-                          : job.status === 'closed'
-                          ? 'bg-red-100 text-red-800'
-                          : 'bg-gray-100 text-gray-800'
-                      }`}
-                    >
-                      {job.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => copyJobLink(job._id)}
-                        className="p-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-blue-100 hover:text-blue-600 transition-colors"
-                        title="Copy job link"
-                      >
-                        <FiLink size={16} />
-                      </button>
-                      <button
-                        onClick={() => handleEdit(job)}
-                        className="p-2 bg-gray-100 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition-colors"
-                        title="Edit job"
-                      >
-                        <FiEdit2 size={16} />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(job._id)}
-                        className="p-2 bg-gray-100 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-colors"
-                        title="Delete job"
-                      >
-                        <FiTrash2 size={16} />
-                      </button>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {loading ? (
+                <tr>
+                  <td colSpan="9" className="text-center py-8">
+                    <div className="flex justify-center items-center">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                      <span className="ml-2 text-gray-600">Loading jobs...</span>
                     </div>
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : jobs.length === 0 ? (
+                <tr>
+                  <td colSpan="9" className="text-center py-8">
+                    <p className="text-gray-500 mb-2">No jobs found</p>
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="text-blue-600 hover:text-blue-800 font-medium"
+                    >
+                      Post your first job
+                    </button>
+                  </td>
+                </tr>
+              ) : (
+                jobs.map((job, index) => (
+                  <tr key={job._id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">
+                      {(index + 1).toString().padStart(2, '0')}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-mono bg-gray-100 px-2 py-1 rounded">
+                          {job._id.slice(-8).toUpperCase()}
+                        </span>
+                        <button
+                          onClick={() => copyJobLink(job._id)}
+                          className={`p-1.5 rounded transition-colors ${
+                            copiedId === job._id
+                              ? 'bg-green-100 text-green-600'
+                              : 'bg-gray-100 text-gray-600 hover:bg-blue-100 hover:text-blue-600'
+                          }`}
+                          title="Copy job link"
+                        >
+                          <FiCopy className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <button
+                        onClick={() => handleViewDetails(job)}
+                        className="text-blue-600 hover:text-blue-800 font-medium text-left flex items-center gap-1"
+                      >
+                        {job.title.length > 30 ? job.title.substring(0, 30) + '...' : job.title}
+                        <FiEye className="ml-1 text-gray-400" size={14} />
+                      </button>
+                    </td>
+                    <td className="px-6 py-4 text-gray-600 whitespace-nowrap">{job.companyName}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <button
+                        onClick={() => handleCategoryClick(job.category?._id)}
+                        className={`px-2 py-1 rounded-md text-sm transition-colors ${
+                          job.category?.name === 'Others'
+                            ? 'bg-purple-100 text-purple-800 hover:bg-purple-200'
+                            : 'bg-blue-100 text-blue-800 hover:bg-blue-200'
+                        }`}
+                      >
+                        {job.category?.name === 'Others' ? (
+                          <>
+                            {job.category.name}
+                            {job.customCategory && (
+                              <span className="ml-1 text-xs font-normal">
+                                ({job.customCategory.length > 10 ? job.customCategory.substring(0, 10) + '...' : job.customCategory})
+                              </span>
+                            )}
+                          </>
+                        ) : (
+                          job.category?.name
+                        )}
+                      </button>
+                    </td>
+                    <td className="px-6 py-4 text-gray-600 whitespace-nowrap">{job.location}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded-md text-xs">
+                        {job.employmentType || 'Full Time'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span
+                        className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                          job.status === 'active'
+                            ? 'bg-green-100 text-green-800'
+                            : job.status === 'closed'
+                            ? 'bg-red-100 text-red-800'
+                            : 'bg-gray-100 text-gray-800'
+                        }`}
+                      >
+                        {job.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => copyJobLink(job._id)}
+                          className="p-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-blue-100 hover:text-blue-600 transition-colors"
+                          title="Copy job link"
+                        >
+                          <FiLink size={16} />
+                        </button>
+                        <button
+                          onClick={() => handleEdit(job)}
+                          className="p-2 bg-gray-100 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition-colors"
+                          title="Edit job"
+                        >
+                          <FiEdit2 size={16} />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(job._id)}
+                          className="p-2 bg-gray-100 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-colors"
+                          title="Delete job"
+                        >
+                          <FiTrash2 size={16} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Job Details Modal */}
       {selectedJobForDetails && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl p-6 w-full max-w-3xl max-h-[80vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-2xl font-bold text-gray-900">Job Details</h2>
@@ -711,27 +713,27 @@ const Jobs = () => {
             
             {/* Job ID and Link Section */}
             <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <p className="text-xs text-gray-500 mb-1">Job ID</p>
-                  <p className="text-sm font-mono font-semibold text-gray-900">{selectedJobForDetails._id}</p>
+                  <p className="text-sm font-mono font-semibold text-gray-900 break-all">{selectedJobForDetails._id}</p>
                 </div>
                 <button
                   onClick={() => copyJobLink(selectedJobForDetails._id)}
-                  className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors"
+                  className="flex items-center justify-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors whitespace-nowrap"
                 >
                   <FiCopy className="w-4 h-4 text-blue-600" />
                   <span className="text-sm font-medium text-gray-700">Copy Job Link</span>
                 </button>
               </div>
-              <p className="text-xs text-gray-400 mt-2">
+              <p className="text-xs text-gray-400 mt-2 break-all">
                 Link: {getBaseUrl()}/job/{selectedJobForDetails._id}
               </p>
             </div>
 
             <div className="space-y-6">
               {/* Basic Info */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium text-gray-500">Job Title</label>
                   <p className="text-gray-900 font-semibold">{selectedJobForDetails.title}</p>
@@ -743,7 +745,7 @@ const Jobs = () => {
               </div>
 
               {/* Category & Location */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium text-gray-500">Category</label>
                   <p className="text-gray-900">
@@ -768,7 +770,7 @@ const Jobs = () => {
               </div>
 
               {/* Experience & Salary */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium text-gray-500">Experience</label>
                   <p className="text-gray-900">{selectedJobForDetails.experience}</p>
@@ -780,7 +782,7 @@ const Jobs = () => {
               </div>
 
               {/* Role & Industry */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium text-gray-500">Role</label>
                   <p className="text-gray-900">{selectedJobForDetails.role || 'N/A'}</p>
@@ -792,7 +794,7 @@ const Jobs = () => {
               </div>
 
               {/* Department & Employment Type */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium text-gray-500">Department</label>
                   <p className="text-gray-900">{selectedJobForDetails.department || 'N/A'}</p>
@@ -804,10 +806,10 @@ const Jobs = () => {
               </div>
 
               {/* Application Email & Vacancies */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium text-gray-500">Application Email</label>
-                  <p className="text-gray-900">{selectedJobForDetails.applicationEmail || 'N/A'}</p>
+                  <p className="text-gray-900 break-all">{selectedJobForDetails.applicationEmail || 'N/A'}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-500">Vacancies</label>
@@ -856,7 +858,7 @@ const Jobs = () => {
               </div>
 
               {/* Status & Dates */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium text-gray-500">Status</label>
                   <p className="text-gray-900">
@@ -878,7 +880,7 @@ const Jobs = () => {
               </div>
 
               {/* Featured & Urgent */}
-              <div className="flex gap-4">
+              <div className="flex flex-wrap gap-4">
                 {selectedJobForDetails.featured && (
                   <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-semibold">
                     ⭐ Featured
@@ -905,7 +907,7 @@ const Jobs = () => {
 
       {/* Create/Edit Job Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-y-auto">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-y-auto p-4">
           <div className="bg-white rounded-xl p-6 w-full max-w-3xl my-8 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-2xl font-bold text-gray-900">
@@ -933,7 +935,7 @@ const Jobs = () => {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Basic Information */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Job Title <span className="text-red-500">*</span>
@@ -963,7 +965,7 @@ const Jobs = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Category <span className="text-red-500">*</span>
@@ -1022,7 +1024,7 @@ const Jobs = () => {
                 )}
 
                 {/* Experience & Salary */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Experience <span className="text-red-500">*</span>
@@ -1053,7 +1055,7 @@ const Jobs = () => {
                 </div>
 
                 {/* Role & Industry */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Role
@@ -1082,7 +1084,7 @@ const Jobs = () => {
                 </div>
 
                 {/* Department & Employment Type */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Department
@@ -1113,7 +1115,7 @@ const Jobs = () => {
                 </div>
 
                 {/* Application Email & Vacancies */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Application Email <span className="text-red-500">*</span>
@@ -1203,7 +1205,7 @@ const Jobs = () => {
                 </div>
 
                 {/* Status & Flags */}
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Status
