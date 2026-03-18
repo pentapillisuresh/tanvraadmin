@@ -6,8 +6,10 @@ import Dashboard from './pages/Dashboard';
 import Categories from './pages/Categories';
 import Jobs from './pages/Jobs';
 import Applications from './pages/Applications';
+import Logos from './pages/Logos'; // Add this import
 import { AuthProvider } from './services/auth';
 import PrivateRoute from './components/PrivateRoute';
+
 
 function App() {
   return (
@@ -21,6 +23,7 @@ function App() {
           <Route path="/categories" element={<PrivateRoute><Categories /></PrivateRoute>} />
           <Route path="/jobs" element={<PrivateRoute><Jobs /></PrivateRoute>} />
           <Route path="/applications" element={<PrivateRoute><Applications /></PrivateRoute>} />
+          <Route path="/logos" element={<PrivateRoute><Logos /></PrivateRoute>} /> {/* Add this route */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </AuthProvider>

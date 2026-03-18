@@ -52,7 +52,7 @@ const Applications = () => {
   };
 
   const handleDownloadResume = (resumePath) => {
-    const url = `https://tanvrabackend-1.onrender.com/${resumePath}`;
+    const url = `http://localhost:5000/${resumePath}`;
     window.open(url, '_blank');
   };
 

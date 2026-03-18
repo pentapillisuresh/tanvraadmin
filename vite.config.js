@@ -8,7 +8,7 @@ export default defineConfig({
     open: true,
     proxy: {
       '/api': {
-        target: 'https://tanvrabackend-1.onrender.com',
+        target: 'http://localhost:5000',
         changeOrigin: true,
       },
     },

@@ -5,6 +5,7 @@ import {
   FiFolder, 
   FiBriefcase, 
   FiUsers, 
+  FiImage, // Add this icon for Logos
   FiLogOut 
 } from 'react-icons/fi';
 import { useAuth } from '../../services/auth';
@@ -23,6 +24,7 @@ const Sidebar = () => {
     { path: '/categories', icon: FiFolder, label: 'Categories' },
     { path: '/jobs', icon: FiBriefcase, label: 'Jobs' },
     { path: '/applications', icon: FiUsers, label: 'Applications' },
+    { path: '/logos', icon: FiImage, label: 'Logos' }, 
   ];
 
   return (
